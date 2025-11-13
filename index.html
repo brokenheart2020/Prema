@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Love Quizzes ❤️ — Prema's Quiz</title>
+  <meta name="description" content="Cute love quizzes, GIFs and 3D heart — mobile friendly." />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ====== Reset & Base ====== */
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220cc;
+      --accent:#ff4d7e;
+      --muted:#97a0b8;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.03);
+      --radius:18px;
+      --glass-border: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Poppins',system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, #1a2130 0%, var(--bg) 22%, #071022 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+      padding:24px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
+      gap:20px;
+    }
+
+    /* Container */
+    .site{
+      width:100%;
+      max-width:980px;
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    /* Left card */
+    .card{
+      background: linear-gradient(180deg,var(--card),rgba(10,14,20,0.6));
+      border-radius:var(--radius);
+      padding:20px;
+      border:1px solid var(--glass-border);
+      box-shadow: 0 8px 30px rgba(2,6,12,0.6);
+      backdrop-filter: blur(6px) saturate(120%);
+    }
+
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    .logo{
+      width:64px;height:64px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#ff6b93,#ffde8a);
+      color:#111;font-weight:700;font-size:26px;
+      box-shadow:0 6px 18px rgba(255,77,126,0.18), inset 0 -6px 10px rgba(255,255,255,0.06);
+    }
+    h1{margin:0;font-size:20px}
+    p.lead{color:var(--muted);margin:6px 0 16px;font-size:13px}
+
+    /* 3D Heart */
+    .heart-wrap{
+      perspective:900px;
+      display:flex;justify-content:center;margin:10px 0 18px;
+    }
+    .heart{
+      width:140px;height:140px;
+      transform-style:preserve-3d;
+      animation: spin 8s linear infinite;
+    }
+    .heart .face{
+      width:100%;height:100%;border-radius:24px;
+      background:linear-gradient(180deg,#ff6b93,#ff2d6f);
+      display:grid;place-items:center;
+      transform-origin:center;
+      box-shadow:0 20px 40px rgba(255,45,111,0.2);
+    }
+    .heart .face::before{
+      content:"❤";font-size:56px;
+      transform:translateZ(28px) rotateX(8deg);
+      filter:drop-shadow(0 6px 18px rgba(255,45,111,0.24));
+    }
+    @keyframes spin{
+      0%{transform:rotateX(0) rotateY(0) rotate(0)}
+      25%{transform:rotateX(12deg) rotateY(40deg) rotate(12deg)}
+      50%{transform:rotateX(0) rotateY(180deg) rotate(8deg)}
+      75%{transform:rotateX(-8deg) rotateY(240deg) rotate(-6deg)}
+      100%{transform:rotateX(0) rotateY(360deg) rotate(0)}
+    }
+
+    /* GIF */
+    .gif{
+      width:100%;
+      height:160px;
+      border-radius:12px;
+      background-size:cover;
+      background-position:center;
+      border:1px solid var(--glass-border);
+      margin-bottom:14px;
+    }
+
+    /* Quiz area */
+    .quiz{
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .question{
+      font-weight:600;font-size:16px;margin:0;
+    }
+    .options{
+      display:grid;gap:10px;margin-top:8px;
+    }
+    .opt{
+      background:var(--glass);
+      padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);
+      cursor:pointer;transition:transform .12s, box-shadow .12s;
+      user-select:none;
+    }
+    .opt:hover{transform:translateY(-4px)}
+    .opt.selected{outline:3px solid rgba(255,77,126,0.12);box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+    .small{font-size:13px;color:var(--muted)}
+
+    .controls{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+    button.btn{
+      padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),#ff8aa8);
+      color:#111;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(255,77,126,0.12);
+    }
+    button.ghost{
+      background:transparent;border:1px solid var(--glass-border);color:var(--muted);padding:9px 12px;border-radius:10px;cursor:pointer;
+    }
+
+    /* Right column: results & share */
+    .right{
+      padding:18px;
+      display:flex;flex-direction:column;gap:14px;
+      min-height:420px;
+    }
+    .result{
+      flex:1;background:linear-gradient(180deg,var(--glass),var(--glass-2));
+      border-radius:14px;padding:14px;border:1px solid var(--glass-border);
+      display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;
+    }
+    .score{font-size:36px;font-weight:800;margin:0}
+    .msg{color:var(--muted);font-size:14px;text-align:center}
+
+    .share{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .share a{padding:8px 12px;border-radius:10px;background:rgba(255,255,255,0.03);text-decoration:none;color:inherit;border:1px solid var(--glass-border)}
+
+    /* footer */
+    footer{grid-column:1/-1;text-align:center;color:var(--muted);margin-top:8px;font-size:13px}
+    /* Responsive */
+    @media (max-width:880px){
+      .site{grid-template-columns:1fr; padding:0}
+      .heart{width:120px;height:120px}
+      .gif{height:140px}
+    }
+  </style>
+</head>
+<body>
+  <main class="site" role="main" aria-labelledby="title">
+    <!-- LEFT -->
+    <section class="card" aria-labelledby="title">
+      <div class="brand">
+        <div class="logo">♡Q</div>
+        <div>
+          <h1 id="title">Love Quizzes — Prema's Corner</h1>
+          <p class="lead">Dil se banaya hua — short, cute quizzes. Mobile-friendly, GIFs aur thoda 3D magic.</p>
+        </div>
+      </div>
+
+      <div class="heart-wrap" aria-hidden="true">
+        <div class="heart" title="Spinning heart">
+          <div class="face" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="gif" id="mainGif" style="background-image:url('https://media.giphy.com/media/3orieYVxUqz7whI9xG/giphy.gif');" role="img" aria-label="Love GIF"></div>
+
+      <div class="quiz" id="quizApp" aria-live="polite">
+        <div>
+          <p class="small">Question <span id="qIndex">1</span> / <span id="qTotal">3</span></p>
+          <h2 class="question" id="questionTitle">Loading...</h2>
+        </div>
+
+        <div class="options" id="optionsList">
+          <!-- options injected by JS -->
+        </div>
+
+        <div class="controls">
+          <button class="ghost" id="prevBtn" aria-label="Previous question">पिछला</button>
+          <div style="display:flex;gap:10px">
+            <button class="btn" id="nextBtn" aria-label="Next question">अगला</button>
+            <button class="ghost" id="resetBtn" aria-label="Reset quiz">रीसेट</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="card right" aria-labelledby="resultsTitle">
+      <h3 id="resultsTitle" style="margin:0 0 6px">नतीजा (Instant)</h3>
+
+      <div class="result" id="resultBox">
+        <p class="score" id="scoreValue">—</p>
+        <p class="msg" id="scoreMsg">Quiz complete करने पर यहाँ स्कोर दिखाई देगा।</p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <small class="small">Share your result</small>
+          <small class="small">Made with ❤️ by Prema</small>
+        </div>
+
+        <div class="share" role="group" aria-label="Share links">
+          <a href="#" id="shareText" onclick="copyResult(event)">Copy result</a>
+          <a id="tweet" href="#" target="_blank" rel="noopener">Share on Twitter</a>
+          <a id="openInNew" href="#" target="_blank" rel="noopener">Open quiz link</a>
+        </div>
+      </div>
+    </aside>
+
+    <footer>
+      Use this file as <strong>index.html</strong> on GitHub Pages. Customize questions in the JS below.
+    </footer>
+  </main>
+
+  <script>
+    /* ====== Simple Quiz Data ====== */
+    const QUIZ = [
+      {
+        q: "आप अपने पसंदीदा व्यक्ति के साथ पहला डेट कहाँ ले जाना चाहोगे?",
+        opts: ["Café जो शांत हो", "पिकनिक बाग़ में", "सिनेमा", "घर पर रोमांटिक डिनर"],
+        a: 1
+      },
+      {
+        q: "अगर वो खुश नहीं है तो आप क्या करोगे?",
+        opts: ["उसे स्पेस दूँगा", "मजाक कर के दिल हल्का करूँगा", "सीधे बात कर के समझूँगा", "उपहार दे दूँगा"],
+        a: 2
+      },
+      {
+        q: "आपके लिए प्यार का सबसे बड़ा निशान क्या है?",
+        opts: ["समर्पण", "इमानदारी", "मज़ा साथ में", "विश्वास"],
+        a: 3
+      }
+    ];
+
+    /* ====== App State ====== */
+    let state = {
+      index: 0,
+      answers: Array(QUIZ.length).fill(null)
+    };
+
+    /* ====== DOM Refs ====== */
+    const qIndexEl = document.getElementById('qIndex');
+    const qTotalEl = document.getElementById('qTotal');
+    const questionTitle = document.getElementById('questionTitle');
+    const optionsList = document.getElementById('optionsList');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const scoreValue = document.getElementById('scoreValue');
+    const scoreMsg = document.getElementById('scoreMsg');
+    const shareText = document.getElementById('shareText');
+    const tweet = document.getElementById('tweet');
+    const openInNew = document.getElementById('openInNew');
+    const qTotal = QUIZ.length;
+
+    qTotalEl.textContent = qTotal;
+
+    /* ====== Render logic ====== */
+    function render(){
+      const i = state.index;
+      qIndexEl.textContent = i + 1;
+      const item = QUIZ[i];
+      questionTitle.textContent = item.q;
+
+      // options
+      optionsList.innerHTML = '';
+      item.opts.forEach((opt, idx) => {
+        const div = document.createElement('div');
+        div.className = 'opt';
+        if(state.answers[i] === idx) div.classList.add('selected');
+        div.textContent = opt;
+        div.setAttribute('role','button');
+        div.setAttribute('tabindex','0');
+        div.onclick = () => selectOption(i, idx);
+        div.onkeypress = (e) => { if(e.key === 'Enter') selectOption(i, idx); };
+        optionsList.appendChild(div);
+      });
+
+      // prev/next button state
+      prevBtn.disabled = i === 0;
+      prevBtn.style.opacity = prevBtn.disabled ? 0.5 : 1;
+      nextBtn.textContent = i === qTotal - 1 ? 'Submit' : 'अगला';
+    }
+
+    function selectOption(questionIndex, choiceIndex){
+      state.answers[questionIndex] = choiceIndex;
+      render();
+      updateResultInstant();
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if(state.index > 0){ state.index--; render(); }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if(state.index < qTotal - 1){
+        state.index++;
+        render();
+      } else {
+        // submit - show final result
+        showFinalResult();
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      state.index = 0; state.answers = Array(qTotal).fill(null); render(); updateResultInstant(); scoreValue.textContent='—'; scoreMsg.textContent='Quiz reset।';
+    });
+
+    /* ====== Scoring ====== */
+    function calculateScore(){
+      let score = 0;
+      for(let i=0;i<QUIZ.length;i++){
+        if(state.answers[i] === QUIZ[i].a) score++;
+      }
+      return score;
+    }
+
+    function updateResultInstant(){
+      const answered = state.answers.filter(x=>x!==null).length;
+      const score = calculateScore();
+      scoreValue.textContent = `${score} / ${qTotal}`;
+      scoreMsg.textContent = `Answered ${answered} / ${qTotal}. सही उत्तरों की संख्या: ${score}`;
+      updateShareLinks(score);
+    }
+
+    function showFinalResult(){
+      const score = calculateScore();
+      let msg = '';
+      if(score === qTotal) msg = 'वाउ! आपकी पसंद और दिल बिन्दास है ❤️';
+      else if(score >= Math.ceil(qTotal*0.66)) msg = 'बहुत अच्छा — आप प्यार में समझदार हैं!';
+      else if(score >= Math.ceil(qTotal*0.33)) msg = 'ठीक है — अभी और थोड़ी बातें सिखनी बाकी हैं 😉';
+      else msg = 'कोई बात नहीं — प्यार एक सफर है, सीखते रहो।';
+      scoreValue.textContent = `${score} / ${qTotal}`;
+      scoreMsg.textContent = msg;
+      updateShareLinks(score, true);
+      // gently shake heart as celebration
+      const heart = document.querySelector('.heart');
+      heart.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.08)' },
+        { transform: 'scale(1)' }
+      ], { duration: 600, iterations: 1 });
+    }
+
+    /* ====== Share / copy ====== */
+    function updateShareLinks(score, final=false){
+      const text = final ? `मेरे Quiz का स्कोर: ${score}/${qTotal} — Love Quizzes by Prema ❤️` : `अभी मेरा स्कोर: ${score}/${qTotal} — Love Quizzes`;
+      shareText.onclick = (e) => { e.preventDefault(); navigator.clipboard?.writeText(text).then(()=> alert('Result copied!')) };
+      tweet.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      // link to this page (works on GitHub Pages)
+      openInNew.href = location.href;
+    }
+
+    function copyResult(ev){
+      ev.preventDefault();
+      const score = calculateScore();
+      const text = `मेरा Love Quiz स्कोर: ${score}/${qTotal} — Check it out!`;
+      if(navigator.clipboard){
+        navigator.clipboard.writeText(text).then(()=> {
+          alert('Result copied to clipboard!');
+        });
+      } else {
+        prompt('Copy this result:', text);
+      }
+    }
+
+    // initial render
+    render();
+    updateResultInstant();
+
+    // small enhancement: change GIF depending on score (demo)
+    function adaptGifByScore(){
+      const s = calculateScore();
+      const gif = document.getElementById('mainGif');
+      if(s === qTotal) gif.style.backgroundImage = "url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif')";
+      else if(s >= 2) gif.style.backgroundImage = "url('https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif')";
+      else gif.style.backgroundImage = "url('https://media.giphy.com/media/26gssIytJvy1b1THO/giphy.gif')";
+    }
+
+    // observe answers changes to update gif & share
+    const originalSelect = selectOption;
+    selectOption = function(questionIndex, choiceIndex){
+      originalSelect(questionIndex, choiceIndex);
+      adaptGifByScore();
+    };
+
+    // accessibility: keyboard quick next (n) previous (p)
+    window.addEventListener('keydown', e=>{
+      if(e.key.toLowerCase() === 'n') nextBtn.click();
+      if(e.key.toLowerCase() === 'p') prevBtn.click();
+    });
+
+  </script>
+</body>
+</html>
